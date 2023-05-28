@@ -57,8 +57,8 @@ export const signIn = async (req, res) => {
         // ID, PASS 모두 성공
         if (userPwdChk && userIdChk) {
             //login 성공 메시지 
-            const token = makeToken(userId);
-            const refToken = makeRefreshToken(userId);
+            const token = makeToken(userId, userIdChk.userType);
+            const refToken = makeRefreshToken(userId, userIdChk.userType);
             const data = {
                 message: `${userIdChk.userId}님 로그인에 성공했습니다.`,
                 token,
@@ -90,7 +90,7 @@ export const genRefreshToken = (req, res) => {
     }
 
     // sign up 과 동시에 토큰 발급 
-    const token = makeToken(refToken);
+    const token = makeToken(refToken, req.user.userType);
     const data = {
         msg: `새 인증 토큰 발급 성공했습니다`,
         token
@@ -112,7 +112,6 @@ export const genRefreshToken = (req, res) => {
 export const getUser = async (req, res) => {
     const userId = req.params.id;
     const user = await findUserById(userId);
-
     // return user model data 조절하기
     // console.dir(user._doc);
     delete user._doc._id;
