@@ -30,7 +30,7 @@ const userSchema = mongoose.Schema({ // 몽구스 요청하고 필드 정의
 // DeprecationWarning: 
 // collection.ensureIndex is deprecated. Use createIndexes instead. 메세지 안보이게
 // mongoose.set("useCreateIndex", true)
-userSchema.set("collection", "user_info"); // collection 이름 정하기
+userSchema.set("collection", "userInfo"); // collection 이름 정하기
 
 // // 모델에 간단한 메서드 추가
 // userSchema.methods.name = function () {
