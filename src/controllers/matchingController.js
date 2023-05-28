@@ -90,11 +90,11 @@ export const cancleMatching = async (req, res) => {
 // ["매칭대기중", "매칭중", "매칭완료", "진행중", "진행완료"]
 export const updateMatching = async (req, res) => {
     const STATUS_MAPPER = {
-        "매칭중": __update매칭대기중To매칭중(req, res),
-        "매칭완료": __update매칭중To매칭완료(req, res),
-        "진행중": __update매칭완료To진행중(req, res),
+        "매칭중": __update매칭대기중To매칭중,
+        "매칭완료": __update매칭중To매칭완료,
+        "진행중": __update매칭완료To진행중,
     };
-    return await STATUS_MAPPER[req.query.status];
+    return await STATUS_MAPPER[req.query.status](req, res);
 };
 
 const __update매칭대기중To매칭중 = async (req, res) => {
