@@ -52,11 +52,13 @@ app.set("jwt-secret", process.env.JWT_SECRET); // set the secret key variable fo
 // ==================== API Routing Setting ==================== //
 
 import userRouter from "./src/routes/userRouter.js";
-import matchingRouter from "./src/routes/matchingRouter.js"
+import matchingRouter from "./src/routes/matchingRouter.js";
+import datasRouter from "./src/routes/datasRouter.js";
 
 // router mapping
 userRouter(app, "/api/user");
 matchingRouter(app, "/api/matching");
+datasRouter(app, "/api/datas");
 
 
 // ==================== Other Config Setting ==================== //
