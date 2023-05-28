@@ -8,6 +8,8 @@ import {
     updateMatchingCancle,
     updateMatchingStepOne,
     updateMatchingStepTwo,
+    updateMatchingStepThree,
+    updateMatchingStepFour,
 } from "../service/matchingService.js";
 
 export const requestNewMatching = async (req, res) => {
@@ -88,27 +90,30 @@ export const cancleMatching = async (req, res) => {
 // 견적서 이제 step by step으로 update & patch
 // ===================================================================================== //
 // ["매칭대기중", "매칭중", "매칭완료", "진행중", "진행완료"]
-export const updateMatching = async (req, res) => {
-    const STATUS_MAPPER = {
-        "매칭중": __update매칭대기중To매칭중,
-        "매칭완료": __update매칭중To매칭완료,
-        "진행중": __update매칭완료To진행중,
-    };
-    return await STATUS_MAPPER[req.query.status](req, res);
-};
 
-const __update매칭대기중To매칭중 = async (req, res) => {
+export const checkTargetMatchingStatus = async (req, res, next) => {
     // 매칭대기중 -> 매칭중, 상태를 바꿀 수 있는 사람은 코디네이터(server) 뿐
     if (req.user.userType != "server")
         return res.status(403).json({ error: "접근 권한이 없습니다. 잘못된 접근 권한 요청입니다." });
 
-    try {
-        const matchingUUID = req.params.uuid;
-        const matching = await findMatchByUUID(matchingUUID);
-        if (!matching)
-            return res.status(404).json({ error: "요청한 uuid에 해당하는 견적서를 찾을 수 없습니다!" });
+    const matchingUUID = req.params.uuid;
+    const matching = await findMatchByUUID(matchingUUID);
+    if (!matching)
+        return res.status(404).json({ error: "요청한 uuid에 해당하는 견적서를 찾을 수 없습니다!" });
 
-        const updatedMatching = await updateMatchingStepOne(matchingUUID, req.user.id);
+    req.matchingUUID = matchingUUID;
+    next();
+}
+
+export const updateMatching = async (req, res) => {
+    const UPDATE_MAPPER = {
+        "매칭중": updateMatchingStepOne(req.matchingUUID, req.user.id),
+        "매칭완료": updateMatchingStepTwo(req.matchingUUID, req.body),
+        "진행중": updateMatchingStepThree(req.matchingUUID),
+        "진행완료": updateMatchingStepFour(req.matchingUUID, req.user.id),
+    };
+    try {
+        const updatedMatching = await UPDATE_MAPPER[req.params.status];
         if (!updatedMatching)
             return res.status(404).json({ error: "요청한 uuid에 해당하는 견적서를 찾을 수 없습니다!" });
 
@@ -120,43 +125,3 @@ const __update매칭대기중To매칭중 = async (req, res) => {
         throw new Error(err);
     }
 };
-
-const __update매칭중To매칭완료 = async (req, res) => {
-    // 매칭중 -> 매칭완료, 상태를 바꿀 수 있는 사람은 코디네이터(server) 뿐
-    if (req.user.userType != "server")
-        return res.status(403).json({ error: "접근 권한이 없습니다. 잘못된 접근 권한 요청입니다." });
-
-    try {
-        const matchingUUID = req.params.uuid;
-        const matching = await findMatchByUUID(matchingUUID);
-        if (!matching)
-            return res.status(404).json({ error: "요청한 uuid에 해당하는 견적서를 찾을 수 없습니다!" });
-
-        const updatedMatching = await updateMatchingStepTwo(matchingUUID, req.body);
-        if (!updatedMatching)
-            return res.status(404).json({ error: "요청한 uuid에 해당하는 견적서를 찾을 수 없습니다!" });
-
-        // 정상 업데이트 완료
-        delete updatedMatching._doc._id;
-        return res.status(200).json({ matching: updatedMatching });
-    } catch (err) {
-        console.log(err);
-        throw new Error(err);
-    }
-};
-
-const __update매칭완료To진행중 = async (req, res) => {
-    // 진입점은
-};
-
-// ===================================================================================== //
-
-// // dump data 겸 모든 user 지우기
-// export const deletAllUser = async (req, res) => {
-//     try {
-//         const result = await deleteUserAll();
-//         return res.status(201).json({ msg: `User delete all ${result}개 삭제 성공` });
-//     } catch (error) {
-//         return res.status(400).json({ msg: "User delete all 실패" });
-//     }
-// };

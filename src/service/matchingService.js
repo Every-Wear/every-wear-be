@@ -1,5 +1,6 @@
 import qrcode from "qrcode";
 import Matching from "../models/matching/matching.js";
+import MatchingDetail from "../models/matching/matchingDetail.js";
 
 
 export const generateQRCode = async (data, options = {}) => {
@@ -55,6 +56,7 @@ export const createMatching = async (body) => {
             preferGender: preferGender,
             remark: remark,
         });
+        await newMatching.save();
         const qrCodeValue = await generateQRCode(String(newMatching.uuid));
         newMatching.qrCodeValue = qrCodeValue;
         const saveMatching = await newMatching.save();
@@ -68,7 +70,7 @@ export const createMatching = async (body) => {
 // 매칭 취소하기
 export const updateMatchingCancle = async (uuid, remark) => {
     try {
-        const updatedQuery = { statusType: "취소", remark: remark }
+        const updatedQuery = { statusType: "취소", remark: remark };
         const updatedMatching = await Matching.findOneAndUpdate(
             { uuid },
             { $set: updatedQuery },
@@ -92,7 +94,7 @@ export const updateMatchingStepOne = async (uuid, subscriptionUserId) => {
         const updatedQuery = {
             subscriptionUserId: subscriptionUserId,
             statusType: "매칭중",
-        }
+        };
         const updatedMatching = await Matching.findOneAndUpdate(
             { uuid },
             { $set: updatedQuery },
@@ -116,7 +118,7 @@ export const updateMatchingStepTwo = async (uuid, body) => {
             preferPlace: preferPlace,
             preferStyle: preferStyle,
             remark: remark,
-        }
+        };
         const updatedMatching = await Matching.findOneAndUpdate(
             { uuid },
             { $set: updatedQuery },
@@ -130,11 +132,47 @@ export const updateMatchingStepTwo = async (uuid, body) => {
 };
 
 // 매칭 완료 to 진행중
-export const updateMatchingStepThree = async (body) => {
-
+export const updateMatchingStepThree = async (uuid) => {
+    try {
+        const updatedQuery = { statusType: "진행중" };
+        const updatedMatching = await Matching.findOneAndUpdate(
+            { uuid },
+            { $set: updatedQuery },
+            { new: true }
+        );
+        return updatedMatching;
+    } catch (err) {
+        console.error(err);
+        return err;
+    }
 };
 
 // 진행중 to 진행완료
-export const updateMatchingStepFour = async (body) => {
+export const updateMatchingStepFour = async (uuid, subscriptionUserId) => {
 
+    // 여기서는 매칭 디테일이 추가되어야 한다!
+    const newMatchingDetail = new MatchingDetail({
+        uuid,
+        publishUserId,
+        subscriptionUserId,
+        is_buy,
+        // clothesPictures,
+        // billingPictures,
+        // otherPictures,
+        epilogue,
+    });
+    await newMatchingDetail.save();
+
+    try {
+        const updatedQuery = { statusType: "진행완료" };
+        const updatedMatching = await Matching.findOneAndUpdate(
+            { uuid },
+            { $set: updatedQuery },
+            { new: true }
+        );
+        return updatedMatching;
+    } catch (err) {
+        console.error(err);
+        return err;
+    }
 };

@@ -8,6 +8,7 @@ import {
     getAllMatchingByStatus,
     getMatching,
     getMatchingQRcodeImage,
+    checkTargetMatchingStatus,
     updateMatching,
     cancleMatching,
 } from "../controllers/matchingController.js";
@@ -26,7 +27,7 @@ const matchingRouter = (app, endpoint) => {
     app.route(`${endpoint}/img/:uuid`).get(getMatchingQRcodeImage);
 
     // 견적서 상태 티키타카, update!
-    app.route(`${endpoint}/:uuid`).patch(updateMatching);
+    app.route(`${endpoint}/:uuid`).patch(checkTargetMatchingStatus, updateMatching);
 
     // 견적 취소
     app.route(`${endpoint}/:uuid`).delete(cancleMatching);
