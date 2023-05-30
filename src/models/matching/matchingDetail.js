@@ -40,5 +40,5 @@ const matchingDetailSchema = mongoose.Schema({ // 몽구스 요청하고 필드 
 }, { versionKey: false });
 
 matchingDetailSchema.set("collection", "matchingDetail"); // collection 이름 정하기
-const MatchingDetail = mongoose.model("Matching", matchingDetailSchema);
+const MatchingDetail = mongoose.model("MatchingDetail", matchingDetailSchema);
 export default MatchingDetail;
