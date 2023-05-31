@@ -3,6 +3,7 @@
 import {
     findMatchByUUID,
     findPendingMatchByClientId,
+    findServiceMatchByClientId,
     findAllMatchByStatus,
     createMatching,
     updateMatchingCancle,
@@ -33,6 +34,13 @@ export const requestNewMatching = async (req, res) => {
         console.log(err);
         throw new Error(err);
     }
+};
+
+export const getMatchingClientCookie = async (req, res) => {
+    const matching = await findServiceMatchByClientId(req.user.id);
+    if (!matching)
+        return res.status(400).json({ error: "존재하는 매칭이 없습니다!" });
+    return res.status(200).json({ matching });
 };
 
 export const getAllMatchingByStatus = async (req, res) => {

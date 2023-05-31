@@ -5,6 +5,7 @@
 import { authCheck } from "../middlewares/auth.js";
 import {
     requestNewMatching,
+    getMatchingClientCookie,
     getAllMatchingByStatus,
     getMatching,
     getMatchingQRcodeImage,
@@ -20,6 +21,9 @@ const matchingRouter = (app, endpoint) => {
 
     // 매칭 견적서 만들기
     app.route(`${endpoint}`).post(requestNewMatching);
+
+    // 나의 매칭 견적서만 가져오기
+    app.route(`${endpoint}/my`).get(getMatchingClientCookie);
 
     // 매칭 견적서 정보 얻어오기
     app.route(`${endpoint}s`).get(getAllMatchingByStatus);
