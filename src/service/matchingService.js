@@ -72,6 +72,7 @@ export const createMatching = async (body) => {
             clothesType: clothesType,
             limitPrice: limitPrice,
             preferPlace: preferPlace,
+            preferTime: preferTime,
             preferStyle: preferStyle,
             preferGender: preferGender,
             remark: remark,
@@ -136,6 +137,7 @@ export const updateMatchingStepTwo = async (uuid, req) => {
             clothesType: clothesType,
             limitPrice: limitPrice,
             preferPlace: preferPlace,
+            preferTime: preferTime,
             preferStyle: preferStyle,
             remark: remark,
         };

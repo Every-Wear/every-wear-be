@@ -15,6 +15,10 @@ import {
 } from "../service/matchingService.js";
 
 export const requestNewMatching = async (req, res) => {
+
+    if (req.user.userType !== "client")
+        return res.status(400).json({ error: "코디네이터는 요청할 수 없습니다!" });
+
     try {
         req.body.publishUserId = req.user.id;
 
