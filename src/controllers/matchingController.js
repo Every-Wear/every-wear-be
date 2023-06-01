@@ -5,6 +5,7 @@ import {
     findPendingMatchByClientId,
     findServiceMatchByClientId,
     findAllMatchByStatus,
+    findAllMatchByServerId,
     createMatching,
     updateMatchingCancle,
     updateMatchingStepOne,
@@ -37,10 +38,21 @@ export const requestNewMatching = async (req, res) => {
 };
 
 export const getMatchingClientCookie = async (req, res) => {
-    const matching = await findServiceMatchByClientId(req.user.id);
-    if (!matching)
-        return res.status(400).json({ error: "존재하는 매칭이 없습니다!" });
-    return res.status(200).json({ matching });
+    
+    // server & client 분기처리
+    const userType = req.user.userType;
+    if (userType === "client") {
+        const matching = await findServiceMatchByClientId(req.user.id);
+        if (!matching)
+            return res.status(400).json({ error: "존재하는 매칭이 없습니다!" });
+        return res.status(200).json({ matching });
+    }
+    else {
+        const matching = await findAllMatchByServerId(req.user.id);
+        if (!matching)
+            return res.status(400).json({ error: "존재하는 매칭이 없습니다!" });
+        return res.status(200).json({ matching });
+    }
 };
 
 export const getAllMatchingByStatus = async (req, res) => {

@@ -44,6 +44,16 @@ export const findServiceMatchByClientId = async (publishUserId) => {
     }
 };
 
+export const findAllMatchByServerId = async (subscriptionUserId) => {
+    try {
+        const matchings = await Matching.find({ subscriptionUserId }).exec();
+        return matchings;
+    } catch (err) {
+        console.error(err);
+        return err;
+    }
+};
+
 export const findAllMatchByStatus = async (status) => {
     try {
         const matchings = await Matching.find({ statusType: status });

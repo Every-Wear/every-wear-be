@@ -22,7 +22,8 @@ export const signUp = async (req, res) => {
             const token = makeToken(userId);
             const refToken = makeRefreshToken(userId);
             const data = {
-                msg: `${newUser.userId}님 회원가입에 성공했습니다`,
+                message: `${newUser.userId}님 회원가입에 성공했습니다`,
+                userType: req.user.userType,
                 token,
                 refToken
             };
@@ -61,6 +62,7 @@ export const signIn = async (req, res) => {
             const refToken = makeRefreshToken(userId, userIdChk.userType);
             const data = {
                 message: `${userIdChk.userId}님 로그인에 성공했습니다.`,
+                userType: userIdChk.userType,
                 token,
                 refToken
             };
