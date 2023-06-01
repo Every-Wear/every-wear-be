@@ -114,14 +114,20 @@ export const checkTargetMatchingStatus = async (req, res, next) => {
 }
 
 export const updateMatching = async (req, res) => {
+    if (req.query.status)
+        return res.status(400).json({ error: "잘못된 요청입니다. query string을 확인해 주세요!" });
+
+    if (!["매칭중", "매칭완료", "진행중", "진행완료"].includes(req.query.status))
+        return res.status(400).json({ error: "잘못된 요청입니다. query string을 확인해 주세요!" });
+
     const UPDATE_MAPPER = {
-        "매칭중": updateMatchingStepOne(req.matchingUUID, req.user.id),
-        "매칭완료": updateMatchingStepTwo(req.matchingUUID, req.body),
-        "진행중": updateMatchingStepThree(req.matchingUUID),
-        "진행완료": updateMatchingStepFour(req.matchingUUID, req.user.id),
+        "매칭중": updateMatchingStepOne,
+        "매칭완료": updateMatchingStepTwo,
+        "진행중": updateMatchingStepThree,
+        "진행완료": updateMatchingStepFour,
     };
     try {
-        const updatedMatching = await UPDATE_MAPPER[req.params.status];
+        const updatedMatching = await UPDATE_MAPPER[req.query.status](req.matchingUUID, req);
         if (!updatedMatching)
             return res.status(404).json({ error: "요청한 uuid에 해당하는 견적서를 찾을 수 없습니다!" });
 

@@ -99,10 +99,10 @@ export const updateMatchingCancle = async (uuid, remark) => {
 // ===================================================================================== //
 
 // 매칭 대기중 to 매칭 중
-export const updateMatchingStepOne = async (uuid, subscriptionUserId) => {
+export const updateMatchingStepOne = async (uuid, req) => {
     try {
         const updatedQuery = {
-            subscriptionUserId: subscriptionUserId,
+            subscriptionUserId: req.user.id,
             statusType: "매칭중",
         };
         const updatedMatching = await Matching.findOneAndUpdate(
@@ -118,8 +118,8 @@ export const updateMatchingStepOne = async (uuid, subscriptionUserId) => {
 };
 
 // 매칭 중 to 매칭 완료
-export const updateMatchingStepTwo = async (uuid, body) => {
-    const { clothesType, limitPrice, preferPlace, preferStyle, remark } = body;
+export const updateMatchingStepTwo = async (uuid, req) => {
+    const { clothesType, limitPrice, preferPlace, preferStyle, remark } = req.body;
     try {
         const updatedQuery = {
             statusType: "매칭완료",
@@ -142,7 +142,7 @@ export const updateMatchingStepTwo = async (uuid, body) => {
 };
 
 // 매칭 완료 to 진행중
-export const updateMatchingStepThree = async (uuid) => {
+export const updateMatchingStepThree = async (uuid, req) => {
     try {
         const updatedQuery = { statusType: "진행중" };
         const updatedMatching = await Matching.findOneAndUpdate(
@@ -158,20 +158,8 @@ export const updateMatchingStepThree = async (uuid) => {
 };
 
 // 진행중 to 진행완료
-export const updateMatchingStepFour = async (uuid, subscriptionUserId) => {
+export const updateMatchingStepFour = async (uuid, req) => {
 
-    // 여기서는 매칭 디테일이 추가되어야 한다!
-    const newMatchingDetail = new MatchingDetail({
-        uuid,
-        publishUserId,
-        subscriptionUserId,
-        is_buy,
-        // clothesPictures,
-        // billingPictures,
-        // otherPictures,
-        epilogue,
-    });
-    await newMatchingDetail.save();
 
     try {
         const updatedQuery = { statusType: "진행완료" };
@@ -180,6 +168,18 @@ export const updateMatchingStepFour = async (uuid, subscriptionUserId) => {
             { $set: updatedQuery },
             { new: true }
         );
+        // 여기서는 매칭 디테일이 추가되어야 한다!
+        const newMatchingDetail = new MatchingDetail({
+            uuid,
+            publishUserId: updatedMatching.publishUserId,
+            subscriptionUserId: req.user.id,
+            is_buy,
+            // clothesPictures,
+            // billingPictures,
+            // otherPictures,
+            epilogue,
+        });
+        await newMatchingDetail.save();
         return updatedMatching;
     } catch (err) {
         console.error(err);
