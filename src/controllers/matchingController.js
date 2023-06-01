@@ -114,7 +114,7 @@ export const checkTargetMatchingStatus = async (req, res, next) => {
 }
 
 export const updateMatching = async (req, res) => {
-    if (req.query.status)
+    if (!req.query.status)
         return res.status(400).json({ error: "잘못된 요청입니다. query string을 확인해 주세요!" });
 
     if (!["매칭중", "매칭완료", "진행중", "진행완료"].includes(req.query.status))
