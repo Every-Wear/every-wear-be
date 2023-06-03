@@ -193,6 +193,10 @@ export const clearMatching = async (req, res) => {
 
 export const fileUploadTest = async (req, res) => {
 
+    const clothesPictures = req.files["clothesPictures"];
+    const billingPictures = req.files["billingPictures"];
+    const otherPictures = req.files["otherPictures"];
+
     if (clothesPictures) {
         clothesPictures.forEach(file => {
             console.log("clothesPictures 중 하나의 파일이 업로드되었습니다.");
