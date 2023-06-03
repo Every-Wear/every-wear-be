@@ -25,7 +25,7 @@ services:
 
   certbot:
     container_name: certbot
-    image: certbot/certbot:arm32v6-latest
+    image: certbot/certbot:latest
     restart: unless-stopped
     volumes:
       - ./nginx/data/conf:/etc/letsencrypt
