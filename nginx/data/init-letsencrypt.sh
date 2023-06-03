@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker compose)" ]; then
   exit 1
 fi
 
-domains=(every-wear.kro.kr www.every-wear.kro.kr)
+domains=(every-wear.kro.kr)
 rsa_key_size=4096
 data_path="./nginx/data/certbot"
 email="qlgks1@naver.com" # Adding a valid address is strongly recommended
