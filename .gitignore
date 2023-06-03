@@ -3,6 +3,7 @@
 **/mongodb/data/**
 **/mongodb/log/**
 **/nginx/log/**
+**/static/**
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,visualstudiocode,node,python,venv

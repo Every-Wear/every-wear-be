@@ -3,6 +3,7 @@
 // ==================== middlewares ==================== //
 
 import { authCheck } from "../middlewares/auth.js";
+import { upload } from "../middlewares/imageMulter.js";
 import {
     requestNewMatching,
     getMatchingClientCookie,
@@ -12,6 +13,7 @@ import {
     checkTargetMatchingStatus,
     updateMatching,
     cancleMatching,
+    fileUploadTest,
 } from "../controllers/matchingController.js";
 
 // ==================== Routing ==================== //
@@ -35,6 +37,13 @@ const matchingRouter = (app, endpoint) => {
 
     // 견적 취소
     app.route(`${endpoint}/:uuid`).delete(cancleMatching);
+
+    // test
+    app.route(`${endpoint}/test/:uuid`).post(checkTargetMatchingStatus, upload.fields([
+        { name: "clothesPictures", maxCount: 3 },
+        { name: "billingPictures", maxCount: 3 },
+        { name: "otherPictures", maxCount: 3 }
+    ]), fileUploadTest);
 };
 
 export default matchingRouter;

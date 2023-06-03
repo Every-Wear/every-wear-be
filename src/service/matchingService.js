@@ -1,7 +1,11 @@
+"use strict";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+
 import qrcode from "qrcode";
 import Matching from "../models/matching/matching.js";
 import MatchingDetail from "../models/matching/matchingDetail.js";
-
 
 export const generateQRCode = async (data, options = {}) => {
     try {
@@ -171,8 +175,6 @@ export const updateMatchingStepThree = async (uuid, req) => {
 
 // 진행중 to 진행완료
 export const updateMatchingStepFour = async (uuid, req) => {
-
-
     try {
         const updatedQuery = { statusType: "진행완료" };
         const updatedMatching = await Matching.findOneAndUpdate(

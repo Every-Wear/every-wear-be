@@ -1,5 +1,4 @@
 "use strict";
-
 import {
     findMatchByUUID,
     findPendingMatchByClientId,
@@ -42,7 +41,7 @@ export const requestNewMatching = async (req, res) => {
 };
 
 export const getMatchingClientCookie = async (req, res) => {
-    
+
     // server & client 분기처리
     const userType = req.user.userType;
     if (userType === "client") {
@@ -107,7 +106,6 @@ export const cancleMatching = async (req, res) => {
     return res.status(200).json({ matching: cancledMatching });
 
     // 취소로 변경 이후 server에게 알려야한다!!
-
 };
 
 // ===================================================================================== //
@@ -133,14 +131,13 @@ export const updateMatching = async (req, res) => {
     if (!req.query.status)
         return res.status(400).json({ error: "잘못된 요청입니다. query string을 확인해 주세요!" });
 
-    if (!["매칭중", "매칭완료", "진행중", "진행완료"].includes(req.query.status))
+    if (!["매칭중", "매칭완료", "진행중"].includes(req.query.status))
         return res.status(400).json({ error: "잘못된 요청입니다. query string을 확인해 주세요!" });
 
     const UPDATE_MAPPER = {
         "매칭중": updateMatchingStepOne,
         "매칭완료": updateMatchingStepTwo,
         "진행중": updateMatchingStepThree,
-        "진행완료": updateMatchingStepFour,
     };
     try {
         const updatedMatching = await UPDATE_MAPPER[req.query.status](req.matchingUUID, req);
@@ -154,4 +151,70 @@ export const updateMatching = async (req, res) => {
         console.log(err);
         throw new Error(err);
     }
+};
+
+// 매칭 완료 처리는 "파일 업로드 미들웨어" 때문에 API 분리
+export const clearMatching = async (req, res) => {
+    if (!req.query.status)
+        return res.status(400).json({ error: "잘못된 요청입니다. query string을 확인해 주세요!" });
+
+    if ("진행완료" !== req.query.status)
+        return res.status(400).json({ error: "잘못된 요청입니다. query string을 확인해 주세요!" });
+
+    const clothesPictures = req.files["clothesPictures"];
+    const billingPictures = req.files["billingPictures"];
+    const otherPictures = req.files["otherPictures"];
+
+    if (clothesPictures) {
+        clothesPictures.forEach(file => {
+            console.log("clothesPictures 중 하나의 파일이 업로드되었습니다.");
+            console.log("경로:", file.path);
+            console.log("파일명:", file.filename);
+        });
+    }
+
+    if (billingPictures) {
+        billingPictures.forEach(file => {
+            console.log("billingPictures 중 하나의 파일이 업로드되었습니다.");
+            console.log("경로:", file.path);
+            console.log("파일명:", file.filename);
+        });
+    }
+
+    if (otherPictures) {
+        otherPictures.forEach(file => {
+            console.log("otherPictures 중 하나의 파일이 업로드되었습니다.");
+            console.log("경로:", file.path);
+            console.log("파일명:", file.filename);
+        });
+    }
+};
+
+
+export const fileUploadTest = async (req, res) => {
+
+    if (clothesPictures) {
+        clothesPictures.forEach(file => {
+            console.log("clothesPictures 중 하나의 파일이 업로드되었습니다.");
+            console.log("경로:", file.path);
+            console.log("파일명:", file.filename);
+        });
+    }
+
+    if (billingPictures) {
+        billingPictures.forEach(file => {
+            console.log("billingPictures 중 하나의 파일이 업로드되었습니다.");
+            console.log("경로:", file.path);
+            console.log("파일명:", file.filename);
+        });
+    }
+
+    if (otherPictures) {
+        otherPictures.forEach(file => {
+            console.log("otherPictures 중 하나의 파일이 업로드되었습니다.");
+            console.log("경로:", file.path);
+            console.log("파일명:", file.filename);
+        });
+    }
+    return res.status(200).json({ "message": "success" });
 };
