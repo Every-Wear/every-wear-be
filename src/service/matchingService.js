@@ -130,7 +130,7 @@ export const updateMatchingStepOne = async (uuid, req) => {
 
 // 매칭 중 to 매칭 완료
 export const updateMatchingStepTwo = async (uuid, req) => {
-    const { clothesType, limitPrice, preferPlace, preferStyle, remark } = req.body;
+    const { clothesType, limitPrice, preferPlace, preferTime, preferStyle, remark } = req.body;
     try {
         const updatedQuery = {
             statusType: "매칭완료",
