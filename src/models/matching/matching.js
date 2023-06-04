@@ -36,7 +36,7 @@ const matchingSchema = mongoose.Schema({ // 몽구스 요청하고 필드 정의
     preferPlace: { // 선호하는 쇼핑 위치, 생각한 값 콤마 기준 중복해서 들어감
         type: String,
     },
-    preferTime: {
+    preferTime: { // 선호 시간 
         type: String,
     },
     preferStyle: { // 선호하는 코디 형태

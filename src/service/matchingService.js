@@ -69,7 +69,7 @@ export const findAllMatchByStatus = async (status) => {
 }
 
 export const createMatching = async (body) => {
-    const { publishUserId, clothesType, limitPrice, preferPlace, preferStyle, preferGender, remark } = body;
+    const { publishUserId, clothesType, limitPrice, preferPlace, preferTime, preferStyle, preferGender, remark } = body;
     try {
         const newMatching = new Matching({
             publishUserId: publishUserId,

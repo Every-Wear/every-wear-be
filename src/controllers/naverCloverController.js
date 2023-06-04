@@ -17,6 +17,10 @@ const stt = async (language, filePath) => {
 };
 
 export const naverClovaSttApi = async (req, res) => {
+
+    if (!req.file)
+        return res.status(400).json({ error: "파일을 확인해 주세요!" });
+
     try {
         // language => 언어 코드 ( Kor, Jpn, Eng, Chn )
         const naverClovaSttApiResult = await stt("Kor", req.file.path);
