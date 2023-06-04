@@ -178,6 +178,11 @@ export const updateMatchingStepFour = async (uuid, req, clothesPictureLinks, bil
             { $set: updatedQuery },
             { new: true }
         );
+
+        // 이미 진행완료 처리 된 것이라면?
+        const existChk = await MatchingDetail.findOne({ uuid }).exec();
+        if (existChk) return null;
+
         // 여기서는 매칭 디테일이 추가되어야 한다!
         const { is_buy, epilogue } = req.body;
         const newMatchingDetail = new MatchingDetail({
@@ -191,7 +196,7 @@ export const updateMatchingStepFour = async (uuid, req, clothesPictureLinks, bil
             epilogue,
         });
         await newMatchingDetail.save();
-        return {updatedMatching, newMatchingDetail};
+        return { updatedMatching, newMatchingDetail };
     } catch (err) {
         console.error(err);
         return err;

@@ -203,7 +203,7 @@ export const clearMatching = async (req, res) => {
     try {
         const matchingFinal = await updateMatchingStepFour(req.matchingUUID, req, clothesPictureLinks, billingPictureLinks, otherPictureLinks);
         if (!matchingFinal)
-            return res.status(404).json({ error: matchingFinal });
+            return res.status(404).json({ error: "이미 진행완료 처리 되었습니다." });
 
         // 정상 업데이트 완료
         const { updatedMatching, newMatchingDetail } = matchingFinal;
