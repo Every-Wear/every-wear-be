@@ -1,8 +1,4 @@
 "use strict";
-import multer from "multer";
-import path from "path";
-import fs from "fs";
-
 import qrcode from "qrcode";
 import Matching from "../models/matching/matching.js";
 import MatchingDetail from "../models/matching/matchingDetail.js";
@@ -174,7 +170,7 @@ export const updateMatchingStepThree = async (uuid, req) => {
 };
 
 // 진행중 to 진행완료
-export const updateMatchingStepFour = async (uuid, req) => {
+export const updateMatchingStepFour = async (uuid, req, clothesPictureLinks, billingPictureLinks, otherPictureLinks) => {
     try {
         const updatedQuery = { statusType: "진행완료" };
         const updatedMatching = await Matching.findOneAndUpdate(
@@ -183,18 +179,19 @@ export const updateMatchingStepFour = async (uuid, req) => {
             { new: true }
         );
         // 여기서는 매칭 디테일이 추가되어야 한다!
+        const { is_buy, epilogue } = req.body;
         const newMatchingDetail = new MatchingDetail({
             uuid,
             publishUserId: updatedMatching.publishUserId,
             subscriptionUserId: req.user.id,
             is_buy,
-            // clothesPictures,
-            // billingPictures,
-            // otherPictures,
+            clothesPictures: clothesPictureLinks,
+            billingPictures: billingPictureLinks,
+            otherPictures: otherPictureLinks,
             epilogue,
         });
         await newMatchingDetail.save();
-        return updatedMatching;
+        return {updatedMatching, newMatchingDetail};
     } catch (err) {
         console.error(err);
         return err;

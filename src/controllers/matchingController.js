@@ -125,7 +125,7 @@ export const checkTargetMatchingStatus = async (req, res, next) => {
 
     req.matchingUUID = matchingUUID;
     next();
-}
+};
 
 export const updateMatching = async (req, res) => {
     if (!req.query.status)
@@ -161,15 +161,22 @@ export const clearMatching = async (req, res) => {
     if ("진행완료" !== req.query.status)
         return res.status(400).json({ error: "잘못된 요청입니다. query string을 확인해 주세요!" });
 
+    // file upload check & append file links
+    const clothesPictureLinks = new Array();
+    const billingPictureLinks = new Array();
+    const otherPictureLinks = new Array();
     const clothesPictures = req.files["clothesPictures"];
     const billingPictures = req.files["billingPictures"];
     const otherPictures = req.files["otherPictures"];
+
 
     if (clothesPictures) {
         clothesPictures.forEach(file => {
             console.log("clothesPictures 중 하나의 파일이 업로드되었습니다.");
             console.log("경로:", file.path);
             console.log("파일명:", file.filename);
+            const tempPath = file.path.replace("/app", "");
+            clothesPictureLinks.push(tempPath);
         });
     }
 
@@ -178,6 +185,8 @@ export const clearMatching = async (req, res) => {
             console.log("billingPictures 중 하나의 파일이 업로드되었습니다.");
             console.log("경로:", file.path);
             console.log("파일명:", file.filename);
+            const tempPath = file.path.replace("/app", "");
+            billingPictureLinks.push(tempPath);
         });
     }
 
@@ -186,7 +195,24 @@ export const clearMatching = async (req, res) => {
             console.log("otherPictures 중 하나의 파일이 업로드되었습니다.");
             console.log("경로:", file.path);
             console.log("파일명:", file.filename);
+            const tempPath = file.path.replace("/app", "");
+            otherPictureLinks.push(tempPath);
         });
+    }
+
+    try {
+        const matchingFinal = await updateMatchingStepFour(req.matchingUUID, req, clothesPictureLinks, billingPictureLinks, otherPictureLinks);
+        if (!matchingFinal)
+            return res.status(404).json({ error: matchingFinal });
+
+        // 정상 업데이트 완료
+        const { updatedMatching, newMatchingDetail } = matchingFinal;
+        delete updatedMatching._doc._id;
+        delete newMatchingDetail._doc._id;
+        return res.status(200).json({ matching: updatedMatching, newMatchingDetail: newMatchingDetail });
+    } catch (err) {
+        console.log(err);
+        throw new Error(err);
     }
 };
 

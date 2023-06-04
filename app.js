@@ -53,12 +53,14 @@ app.set("jwt-secret", process.env.JWT_SECRET); // set the secret key variable fo
 
 import userRouter from "./src/routes/userRouter.js";
 import matchingRouter from "./src/routes/matchingRouter.js";
+import matchingDetailRouter from "./src/routes/matchingDetailRouter.js";
 import datasRouter from "./src/routes/datasRouter.js";
 import naverClovaRouter from "./src/routes/naverCloverSttRouter.js";
 
 // router mapping
 userRouter(app, "/api/user");
 matchingRouter(app, "/api/matching");
+matchingDetailRouter(app, "/api/matching-detail");
 datasRouter(app, "/api/datas");
 naverClovaRouter(app, "/api/stt");
 

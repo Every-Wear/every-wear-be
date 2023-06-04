@@ -13,6 +13,7 @@ import {
     checkTargetMatchingStatus,
     updateMatching,
     cancleMatching,
+    clearMatching,
     fileUploadTest,
 } from "../controllers/matchingController.js";
 
@@ -34,11 +35,17 @@ const matchingRouter = (app, endpoint) => {
 
     // 견적서 상태 티키타카, update!
     app.route(`${endpoint}/:uuid`).patch(checkTargetMatchingStatus, updateMatching);
-
+    // 마지막, 진행중 -> 진행완료
+    app.route(`${endpoint}/:uuid`).post(checkTargetMatchingStatus, upload.fields([
+        { name: "clothesPictures", maxCount: 3 },
+        { name: "billingPictures", maxCount: 3 },
+        { name: "otherPictures", maxCount: 3 }
+    ]), clearMatching);
     // 견적 취소
     app.route(`${endpoint}/:uuid`).delete(cancleMatching);
 
-    // test
+    
+    // file upload test
     app.route(`${endpoint}/test/:uuid`).post(checkTargetMatchingStatus, upload.fields([
         { name: "clothesPictures", maxCount: 3 },
         { name: "billingPictures", maxCount: 3 },
