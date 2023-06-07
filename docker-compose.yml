@@ -10,6 +10,7 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/log:/var/log/nginx
       - ./static:/etc/nginx/static
+      - ./.next:/etc/nginx/front-end
     ports:
       - "80:80"
       - "443:443"

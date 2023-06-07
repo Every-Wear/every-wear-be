@@ -36,7 +36,7 @@ export const findPendingMatchByClientId = async (publishUserId) => {
 
 export const findServiceMatchByClientId = async (publishUserId) => {
     try {
-        const matching = await Matching.findOne({ publishUserId: publishUserId, statusType: { $ne: "진행완료", $ne: "취소" } }).exec();
+        const matching = await Matching.findOne({ publishUserId: publishUserId, statusType: { $nin: ["진행완료", "취소"] } }).exec();
         return matching;
     } catch (err) {
         console.error(err);
