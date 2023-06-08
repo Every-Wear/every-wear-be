@@ -16,7 +16,6 @@ const userSchema = mongoose.Schema({ // 몽구스 요청하고 필드 정의
     },
     userType: {
         type: String,
-        enum: ["client", "server",]
     },
     gender: String, // 성별
     age: String, // 연령대
