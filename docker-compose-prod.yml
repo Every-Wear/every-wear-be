@@ -9,7 +9,7 @@ services:
       - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/conf-prod.d:/etc/nginx/conf.d
       - ./nginx/log:/var/log/nginx
-      - ./nginx/ssl/www:/etc/ssl
+      - ./nginx/ssl/www:/etc/nginx/ssl
       - ./static:/etc/nginx/static
     ports:
       - "80:80"
