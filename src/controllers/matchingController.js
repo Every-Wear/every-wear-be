@@ -67,7 +67,7 @@ export const getAllMatchingByStatus = async (req, res) => {
 export const getMatching = async (req, res) => {
     const matchingUUID = req.params.uuid;
     const matching = await findMatchByUUID(matchingUUID);
-    delete matching._doc._id;
+    // delete matching._doc._id;
     return res.status(200).json({ matching });
 };
 
