@@ -9,8 +9,7 @@ services:
       - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/conf-prod.d:/etc/nginx/conf.d
       - ./nginx/log:/var/log/nginx
-      # - ./nginx/certbot/conf:/etc/letsencrypt
-      # - ./nginx/certbot/www:/var/www/certbot
+      - ./nginx/ssl/www:/etc/ssl
       - ./static:/etc/nginx/static
     ports:
       - "80:80"
@@ -21,18 +20,6 @@ services:
       - every-wear-network
     depends_on:
       - ew-app
-    # command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-
-  # certbot:
-  #   container_name: certbot
-  #   image: certbot/certbot:latest
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./nginx/certbot/conf:/etc/letsencrypt
-  #     - ./nginx/certbot/www:/var/www/certbot
-  #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-  #   networks:
-  #     - every-wear-network
 
   ew-app:
     build:
