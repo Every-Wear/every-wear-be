@@ -23,7 +23,6 @@ export const signUp = async (req, res) => {
             const refToken = makeRefreshToken(userId);
             const data = {
                 message: `${newUser.userId}님 회원가입에 성공했습니다`,
-                userType: req.user.userType,
                 token,
                 refToken
             };
