@@ -44,7 +44,6 @@ const matchingSchema = mongoose.Schema({ // 몽구스 요청하고 필드 정의
     },
     preferGender: { // 선호하는 코디 성별
         type: String,
-        enum: ["man", "woman"]
     },
     remark: { // 기타 및 비고란 
         type: String,
