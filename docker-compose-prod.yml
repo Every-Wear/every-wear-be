@@ -32,6 +32,7 @@ services:
       - ./src:/app/src
       - ./www:/app/www
       - ./app.js:/app/app.js
+      - ./static:/app/static
     ports:
       - "3000:3000"
     networks:
