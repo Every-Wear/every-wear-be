@@ -6,6 +6,8 @@ import {
     deleteUserAll
 } from "../service/userService.js";
 
+import { createLoggingData } from "../service/datasService.js";
+
 export const signUp = async (req, res) => {
     const { body: { userId } } = req;
 
@@ -36,6 +38,16 @@ export const signUp = async (req, res) => {
 
 
 export const signIn = async (req, res) => {
+
+    // 일단 모든 로그인 요청은 기록해두기, 
+    // 비동기, 비즈니스 로직 time에 영향X
+    try {
+        createLoggingData(req);
+    } catch (error) {
+        // pass
+        console.log(error);
+    }
+
 
     try {
         const { body: { userId, password } } = req;

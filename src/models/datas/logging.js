@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 
 const loggingSchema = mongoose.Schema({ // 몽구스 요청하고 필드 정의
-    loginId: {
-        type: String,
-    },
-
+    loginId: String,
+    ip: String,
+    reqUrl: String,
+    reqMethod: String,
+    reqHeaders: Object,
+    reqBody: Object,
     createdAt: {
         type: Date,
         default: Date.now
