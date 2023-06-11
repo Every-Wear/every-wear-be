@@ -116,7 +116,7 @@ export const cancleMatching = async (req, res) => {
 export const checkTargetMatchingStatus = async (req, res, next) => {
     // 매칭대기중 -> 매칭중, 상태를 바꿀 수 있는 사람은 코디네이터(server) 뿐
     // test userId는 test only 계정임
-    if (req.user.userType != "server" || req.user.id === "test1" || req.user.id === "test2")
+    if (req.user.userType != "server")
         return res.status(403).json({ error: "접근 권한이 없습니다. 잘못된 접근 권한 요청입니다." });
 
 
