@@ -78,7 +78,7 @@ export const createMatching = async (body) => {
             remark: remark,
         });
         await newMatching.save();
-        const qrCodeValue = await generateQRCode(`${process.env.DOMAIN_NAME}/server/currentStatus/detail/${String(newMatching.uuid)}`);
+        const qrCodeValue = await generateQRCode(`${process.env.FE_DOMAIN_NAME}/server/currentStatus/detail/${String(newMatching.uuid)}`);
         newMatching.qrCodeValue = qrCodeValue;
         const saveMatching = await newMatching.save();
         return saveMatching;

@@ -178,7 +178,7 @@ export const clearMatching = async (req, res) => {
             console.log("경로:", file.path);
             console.log("파일명:", file.filename);
             const tempPath = file.path.replace("/app", "");
-            clothesPictureLinks.push(`${process.env.DOMAIN_NAME}${tempPath}`);
+            clothesPictureLinks.push(`${process.env.BE_DOMAIN_NAME}${tempPath}`);
         });
     }
 
@@ -188,7 +188,7 @@ export const clearMatching = async (req, res) => {
             console.log("경로:", file.path);
             console.log("파일명:", file.filename);
             const tempPath = file.path.replace("/app", "");
-            billingPictureLinks.push(`${process.env.DOMAIN_NAME}${tempPath}`);
+            billingPictureLinks.push(`${process.env.BE_DOMAIN_NAME}${tempPath}`);
         });
     }
 
@@ -198,7 +198,7 @@ export const clearMatching = async (req, res) => {
             console.log("경로:", file.path);
             console.log("파일명:", file.filename);
             const tempPath = file.path.replace("/app", "");
-            otherPictureLinks.push(`${process.env.DOMAIN_NAME}${tempPath}`);
+            otherPictureLinks.push(`${process.env.BE_DOMAIN_NAME}${tempPath}`);
         });
     }
 
