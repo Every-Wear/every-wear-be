@@ -19,4 +19,4 @@ RUN apk --no-cache add yarn \
 ENV PATH="/app/node_modules/.bin:$PATH"
 
 # CMD ["pm2-runtime", "start", "yarn", "--name", "everywear-be", "--watch", "--", "start"]
-CMD ["pm2-runtime", "start", "--interpreter", "sh", "yarn", "--name", "everywear-be", "--watch", "--", "start"]
+CMD ["pm2-runtime", "start", "--restart-delay", "2000", "--interpreter", "sh", "yarn", "--name", "everywear-be", "--watch", "--", "start"]
