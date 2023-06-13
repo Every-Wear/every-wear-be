@@ -1,4 +1,8 @@
 # Every Wear Application Backend
 
-- 이니셜라이징 모든 설명은 하기 노션에서 합니다.
-- https://nuung.notion.site/Backend-Local-Seting-2c5849f4a54d42c3803469222cf925ed
+[![Deploy Dev](https://github.com/Every-Wear/every-wear-fe/actions/workflows/dev-build.yml/badge.svg?branch=dev)](https://github.com/Every-Wear/every-wear-fe/actions/workflows/dev-build.yml)
+
+> 시각장애인 의류 쇼핑 인프라 개선, 코디네이터 매칭 플랫폼 <br/>
+> https://everywear.kro.kr
+
+![](./imgs/img0.jpg)
